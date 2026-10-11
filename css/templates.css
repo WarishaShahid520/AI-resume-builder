@@ -1,0 +1,173 @@
+/* ==========================================================================
+   Quill — Resume templates
+   --------------------------------------------------------------------------
+   The resume is always drawn on an A4 "paper" (794 x 1123 px at 96 dpi).
+   js/app.js scales it down to fit the preview, and css/print.css prints it
+   at full size for PDF export.
+
+   Each template is scoped by a class on the paper:
+       .tpl-modern  .tpl-classic  .tpl-minimal  .tpl-bold
+   The accent color arrives through the CSS variable --accent, set by app.js.
+
+   Contents
+     1. Paper & shared resume components
+     2. Modern   (sidebar)
+     3. Classic  (centered, serif)
+     4. Minimal  (airy, gutter titles)
+     5. Bold     (color header)
+   ========================================================================== */
+
+
+/* 1. PAPER & SHARED COMPONENTS ------------------------------------------- */
+
+.paper {
+  --accent: #4f46e5;
+  --ink: #1f2430;
+  --ink-soft: #566074;
+
+  position: relative;
+  width: 794px;
+  min-height: 1123px;
+  background: #fff;
+  color: var(--ink);
+  font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 24px 60px -24px rgba(0, 0, 0, .35);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Dashed guide where the PDF will break onto a new page (preview only). */
+.paper::after {
+  content: "";
+  position: absolute; left: 0; right: 0; top: 1123px; bottom: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(to bottom,
+    color-mix(in srgb, var(--accent) 55%, transparent) 0, color-mix(in srgb, var(--accent) 55%, transparent) 1px,
+    transparent 1px, transparent 1123px);
+}
+
+.paper.swap { animation: swap .35s cubic-bezier(.2, .7, .2, 1); }
+
+.paper h1, .paper h3, .paper h4, .paper p, .paper ul { margin: 0; }
+.paper ul { padding: 0 0 0 18px; list-style: disc; }
+.paper li { margin: 2px 0; padding-left: 2px; }
+.paper li::marker { color: var(--accent); }
+
+.r-name { font-size: 34px; line-height: 1.1; font-weight: 700; letter-spacing: -.02em; }
+.r-title { margin-top: 4px; font-size: 16px; font-weight: 600; color: var(--accent); }
+.r-summary { color: var(--ink); }
+.r-empty { padding: 40px 48px; color: var(--ink-soft); }
+
+/* Section heading + body */
+.r-h {
+  font-size: 11.5px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--accent); padding-bottom: 6px; margin-bottom: 10px;
+  border-bottom: 1.5px solid color-mix(in srgb, var(--accent) 28%, #fff);
+}
+
+/* One job / degree / project */
+.entry { margin-bottom: 12px; break-inside: avoid; }
+.entry:last-child { margin-bottom: 0; }
+.entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.entry-head h4 { font-size: 14px; font-weight: 700; }
+.entry-date { flex: none; font-size: 12px; color: var(--ink-soft); }
+.entry-sub { font-weight: 500; color: var(--ink-soft); }
+.entry-body { margin-top: 4px; }
+.entry-body p, .entry-body li { color: var(--ink); }
+
+.skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.skill {
+  padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 500;
+  color: var(--accent); background: color-mix(in srgb, var(--accent) 11%, #fff);
+}
+
+.r-contact { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 12.5px; }
+.r-contact-list { padding: 0 !important; list-style: none !important; display: grid; gap: 6px; font-size: 12.5px; word-break: break-word; }
+.r-contact-list li { margin: 0; padding: 0; }
+
+.paper .r-sec + .r-sec { margin-top: 20px; }
+
+
+/* 2. MODERN -------------------------------------------------------------- */
+
+.tpl-modern {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  /* The sidebar color is painted as a background so it runs the full page height. */
+  background: linear-gradient(to right, var(--accent) 250px, #fff 250px);
+}
+.tpl-modern .m-side { padding: 44px 26px; color: #fff; display: grid; gap: 24px; align-content: start; }
+.tpl-modern .m-side .r-sec + .r-sec { margin-top: 0; }
+.tpl-modern .m-side .r-h { color: rgba(255, 255, 255, .85); border-bottom-color: rgba(255, 255, 255, .28); }
+.tpl-modern .m-side .entry-date,
+.tpl-modern .m-side .entry-sub { color: rgba(255, 255, 255, .8); }
+.tpl-modern .m-side .entry-head { flex-direction: column; gap: 0; }
+.tpl-modern .m-side .entry-body p,
+.tpl-modern .m-side .entry-body li { color: rgba(255, 255, 255, .92); font-size: 12.5px; }
+.tpl-modern .m-side li::marker { color: rgba(255, 255, 255, .7); }
+.tpl-modern .m-side .skill { color: #fff; background: rgba(255, 255, 255, .18); }
+.tpl-modern .m-main { padding: 44px 40px 44px 36px; display: grid; gap: 22px; align-content: start; min-width: 0; }
+.tpl-modern .m-main .r-sec + .r-sec { margin-top: 0; }
+.tpl-modern .r-name { font-size: 36px; }
+.tpl-modern .r-empty { grid-column: 2; padding: 0 40px 0 36px; }
+
+
+/* 3. CLASSIC ------------------------------------------------------------- */
+
+.tpl-classic {
+  padding: 48px 56px;
+  font-family: "Source Serif 4", Georgia, "Times New Roman", serif;
+  font-size: 13.5px; line-height: 1.55;
+  --accent: #1f2430;
+}
+.tpl-classic .r-head { text-align: center; padding-bottom: 16px; margin-bottom: 20px; border-bottom: 2px solid var(--ink); }
+.tpl-classic .r-name { font-size: 36px; letter-spacing: .01em; }
+.tpl-classic .r-title { color: var(--ink-soft); font-style: italic; font-weight: 400; font-size: 16px; }
+.tpl-classic .r-contact { justify-content: center; gap: 4px 0; margin-top: 10px; font-size: 12.5px; }
+.tpl-classic .r-contact span + span::before { content: "•"; margin: 0 12px; opacity: .45; }
+.tpl-classic .r-h {
+  text-transform: none; letter-spacing: .06em; font-size: 14px; font-variant: small-caps; color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+.tpl-classic li::marker { color: var(--ink); }
+.tpl-classic .skill { padding: 0; background: none; color: var(--ink); font-size: 13px; font-weight: 400; border-radius: 0; }
+.tpl-classic .skill + .skill::before { content: "•"; margin: 0 9px; opacity: .45; }
+.tpl-classic .skills { gap: 2px 0; }
+.tpl-classic .entry-head h4 { font-size: 14px; }
+.tpl-classic .entry-sub { font-style: italic; }
+.tpl-classic .r-empty { padding: 0; text-align: center; }
+
+
+/* 4. MINIMAL ------------------------------------------------------------- */
+
+.tpl-minimal { padding: 56px 56px 48px; }
+.tpl-minimal .r-head { margin-bottom: 26px; }
+.tpl-minimal .r-name { font-size: 42px; font-weight: 300; letter-spacing: -.03em; }
+.tpl-minimal .r-title { font-weight: 400; color: var(--ink-soft); font-size: 17px; }
+.tpl-minimal .r-contact { margin-top: 14px; color: var(--ink-soft); gap: 4px 20px; }
+.tpl-minimal .r-sec { display: grid; grid-template-columns: 124px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid #e6e8ef; }
+.tpl-minimal .r-sec + .r-sec { margin-top: 0; }
+.tpl-minimal .r-h { margin: 0; padding: 0; border: 0; text-transform: none; letter-spacing: 0; font-size: 13px; font-weight: 600; }
+.tpl-minimal .r-body { min-width: 0; }
+.tpl-minimal .skill { padding: 2px 10px; background: transparent; border: 1px solid color-mix(in srgb, var(--accent) 35%, #fff); }
+.tpl-minimal .r-empty { padding: 0; }
+
+
+/* 5. BOLD ---------------------------------------------------------------- */
+
+.tpl-bold { padding: 0; }
+.tpl-bold .r-band {
+  padding: 42px 48px 34px; color: #fff;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 52%, #000));
+}
+.tpl-bold .r-name { font-size: 42px; font-weight: 800; letter-spacing: -.03em; }
+.tpl-bold .r-title { color: rgba(255, 255, 255, .92); font-size: 17px; }
+.tpl-bold .r-contact { margin-top: 16px; gap: 6px 22px; opacity: .95; }
+.tpl-bold .r-cols { display: grid; grid-template-columns: 1fr 232px; gap: 32px; padding: 30px 48px 44px; }
+.tpl-bold .r-col-main { min-width: 0; }
+.tpl-bold .r-col-side { align-self: start; padding: 18px 18px 20px; border-radius: 10px; background: color-mix(in srgb, var(--accent) 7%, #fff); }
+.tpl-bold .r-col-side:empty { display: none; }
+.tpl-bold .r-col-side .entry-head { flex-direction: column; gap: 0; }
+.tpl-bold .r-empty { padding: 0 48px 40px; }

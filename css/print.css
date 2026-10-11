@@ -1,0 +1,104 @@
+/* ==========================================================================
+   Quill — Print / PDF export
+   --------------------------------------------------------------------------
+   Loaded with media="print", so these rules only apply when the user clicks
+   "Download PDF" (or presses Ctrl/Cmd + P). Everything except the resume is
+   hidden and the paper is printed at true A4 size.
+
+   !important is used on purpose: the preview sets inline sizes and
+   transforms (to scale the paper to fit the screen) that must be undone here.
+   ========================================================================== */
+
+@page {
+  size: A4;
+  margin: 0;
+}
+
+html, body {
+  background: #fff !important;
+  height: auto !important;
+}
+
+body::before { display: none !important; }
+
+/* Hide all app chrome */
+.skip-link,
+.nav,
+.hero,
+.features,
+.footer,
+.builder-head,
+.editor,
+.preview-toolbar,
+.mobile-tabs,
+.toasts {
+  display: none !important;
+}
+
+/* Flatten the layout so only the paper remains */
+.builder {
+  display: block !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.builder-grid { display: block !important; }
+
+.preview-panel {
+  display: block !important; /* also shown on mobile when the "Edit" tab was active */
+  position: static !important;
+  height: auto !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: none !important;
+  overflow: visible !important;
+}
+
+.stage {
+  padding: 0 !important;
+  overflow: visible !important;
+  background: none !important;
+}
+
+.paper-box {
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+}
+
+.paper-scaler {
+  width: auto !important;
+  transform: none !important;
+}
+
+.paper {
+  width: 100% !important;
+  min-height: 0 !important;
+  box-shadow: none !important;
+  animation: none !important;
+}
+
+/* Remove the on-screen page-break guide */
+.paper::after { display: none !important; }
+
+/* Keep colors (sidebar, header band, skill chips) in the PDF */
+.paper, .paper * {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Repeat padding on every page when a resume runs past one page (Chromium 130+) */
+.paper, .paper * {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Avoid splitting a job or degree across two pages */
+.entry,
+.r-h {
+  break-inside: avoid;
+}
+
+.r-h { break-after: avoid; }
